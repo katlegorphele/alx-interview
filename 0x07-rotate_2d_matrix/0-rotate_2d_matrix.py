@@ -20,10 +20,7 @@ def rotate_2d_matrix(matrix: list) -> None:
 
     # Iterate through the matrix
     for i in range(n):
-        for j in range(n):
+        for j in range(n-1, -1, -1):
             t_list.append(temp_list[j][i])
-        t_list.reverse()
         matrix[i] = t_list
         t_list = []
-
-    return matrix
