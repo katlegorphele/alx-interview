@@ -14,13 +14,11 @@ def rotate_2d_matrix(matrix: list) -> None:
     """
 
     # Get the length of the matrix
-    n = len(matrix)
-    t_list = []
-    temp_list = list(matrix)
-
-    # Iterate through the matrix
+    n: int = len(matrix)
+    temp: list = []
+    tmp: list = list(matrix)
     for i in range(n):
-        for j in range(n-1, -1, -1):
-            t_list.append(temp_list[j][i])
-        matrix[i] = t_list
-        t_list = []
+        for j in range(n - 1, -1, -1):
+            temp.append(tmp[j][i])
+        matrix[i] = temp
+        temp = []
