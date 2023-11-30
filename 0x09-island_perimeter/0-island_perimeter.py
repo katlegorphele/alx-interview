@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 
-'''
+"""
 Island Perimeter
-'''
+"""
+
 
 def island_perimeter(grid):
-    '''
+    """
     Returns perimeter of island described in grid
-    '''
-    
+    """
+
     perimeter = 0
     # Iterate through grid to get rows
     for row in range(len(grid)):
@@ -17,10 +18,10 @@ def island_perimeter(grid):
             # Check if number is 1
             if grid[row][col] == 1:
                 # check if edge or 0 above
-                if row == 0 or grid[row - 1][col] == 0: 
+                if row == 0 or grid[row - 1][col] == 0:
                     perimeter += 1
                 # check if edge or 0 below
-                if row == len(grid) - 1 or grid[row + 1][col] == 0: 
+                if row == len(grid) - 1 or grid[row + 1][col] == 0:
                     perimeter += 1
                 # check if edge or 0 left
                 if col == 0 or grid[row][col - 1] == 0:
@@ -29,5 +30,3 @@ def island_perimeter(grid):
                 if col == len(grid[row]) - 1 or grid[row][col + 1] == 0:
                     perimeter += 1
     return perimeter
-
-
