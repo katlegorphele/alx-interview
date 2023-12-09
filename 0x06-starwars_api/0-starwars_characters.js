@@ -3,9 +3,9 @@
 Display one character name per line in the 
 same order as the “characters” list in the /films/ endpoint*/
 
-const req = require('request');
+const req = require("request");
 const args = process.argv.slice(2);
-const url = 'https://swapi-api.hbtn.io/api/films/' + args[0];
+const url = "https://swapi-api.hbtn.io/api/films/" + args[0];
 
 req(url, function (err, res, body) {
   if (err) {
@@ -22,6 +22,4 @@ req(url, function (err, res, body) {
       });
     }
   }
-}
-);
-
+});
