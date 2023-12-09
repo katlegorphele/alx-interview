@@ -1,46 +1,27 @@
 #!/usr/bin/node
-/* Fetch Data from starwars API */
+/* Fetch Data from starwars API 
+Display one character name per line in the 
+same order as the “characters” list in the /films/ endpoint*/
 
 const req = require('request');
 const args = process.argv.slice(2);
+const url = 'https://swapi-api.hbtn.io/api/films/' + args[0];
 
-const fetchData = (url) => {
-  const promise = new Promise((resolve, reject) => {
-    // send get request
-    req.get(url, (error, response, body) => {
-      if (error) {
-        reject(error);
-      } else if (response.statusCode !== 200) {
-        // console.log(`${response.statusCode}`);
-        reject(new Error('Something Went Wrong!, Try Again'));
-      } else {
-        resolve(JSON.parse(body));
-      }
-    });
-  });
-  return promise;
-};
-
-const fetchStarWarsMovies = async (movieID) => {
-  try {
-    const apiUrl = `https://swapi-api.hbtn.io/api/films/${movieID}/`;
-    const data = await fetchData(apiUrl);
-    const characters = data.characters;
-    // console.log(characters)
-    // loop through the characters array to get their names
-    const charactersName = await Promise.all(
-      characters.map(async (url) => {
-        const character = await fetchData(url);
-        return character.name;
-      })
-    );
-
-    // console.log(charactersName);
-    charactersName.forEach((name) => console.log(`${name}`));
-  } catch (error) {
-    console.log(error);
+req(url, function (err, res, body) {
+  if (err) {
+    console.log(err);
+  } else {
+    const characters = JSON.parse(body).characters;
+    for (const character of characters) {
+      req(character, function (err, res, body) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(JSON.parse(body).name);
+        }
+      });
+    }
   }
-};
+}
+);
 
-const movieID = args[0];
-fetchStarWarsMovies(movieID);
