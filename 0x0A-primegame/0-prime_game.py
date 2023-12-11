@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+'''
+Module that contains the isWinner function
+'''
+
 def isWinner(x, nums):
     def is_prime(num):
         if num < 2:
