@@ -10,23 +10,29 @@ def isWinner(x, nums):
     '''
     if not nums or x < 1:
         return None
-    n = max(nums)
-    sieve = [True] * (n + 1)
-    sieve[0] = False
-    sieve[1] = False
-    for i in range(2, int(n ** 0.5) + 1):
-        if sieve[i] == True:
-            for j in range(i * i, n + 1, i):
-                sieve[j] = False
-    primes = []
-    for i in range(len(sieve)):
-        if sieve[i] == True:
-            primes.append(i)
-    player1 = 0
-    for i in nums:
-        if i in primes:
-            player1 += 1
-    if player1 % 2 == 0:
+
+    # Function to generate primes up to n
+    def generate_primes(n):
+        sieve = [True] * (n + 1)
+        sieve[0] = sieve[1] = False
+        for i in range(2, int(n ** 0.5) + 1):
+            if sieve[i]:
+                for j in range(i * i, n + 1, i):
+                    sieve[j] = False
+        return [i for i, is_prime in enumerate(sieve) if is_prime]
+
+    # Function to play a round
+    def play_round(n):
+        primes = generate_primes(n)
+        return len(primes) % 2 == 0  # Ben wins if the number of primes is even
+
+    # Play all rounds and count Ben's wins
+    ben_wins = sum(play_round(n) for n in nums)
+
+    # Determine the winner
+    if ben_wins > x / 2:
         return "Ben"
-    else:
+    elif ben_wins < x / 2:
         return "Maria"
+    else:
+        return None  # It's a draw
