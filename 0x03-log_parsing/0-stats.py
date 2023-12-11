@@ -1,40 +1,50 @@
 #!/usr/bin/python3
 
-'''script that reads stdin line by line and computes metrics'''
+"""script that reads stdin line by line and computes metrics"""
 
 from sys import stdin
 
 total_file_size: int = 0
 status_code_dict: dict = {}
 
+#!/usr/bin/python3
+import sys
+import signal
+
+# Initialize variables
+total_size = 0
+status_codes = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+line_count = 0
+
+
+def print_stats(signal=None, frame=None):
+    """Print statistics"""
+    print("File size: {}".format(total_size))
+    for code in sorted(status_codes.keys()):
+        if status_codes[code] > 0:
+            print("{}: {}".format(code, status_codes[code]))
+
+
+# Set signal handler for CTRL+C
+signal.signal(signal.SIGINT, print_stats)
+
 try:
-    # loop through keyboard input lines
-    for line_no, line in enumerate(stdin):
-        line_token: list = line.split()
-
-        if len(line_token) != 9:
-            continue
-
-        ip_, _, _, _, _, _, request, status_code,  file_size = line_token
-
+    for line in sys.stdin:
         try:
-            status_code = int(status_code)
-        except ValueError:
+            parts = line.split()
+            size = int(parts[-1])
+            code = int(parts[-2])
+            total_size += size
+            if code in status_codes:
+                status_codes[code] += 1
+        except:
             continue
 
-        total_file_size += int(file_size)
+        line_count += 1
+        if line_count % 10 == 0:
+            print_stats()
 
-        if status_code in status_code_dict:
-            status_code_dict[status_code] += 1
-        else:
-            status_code_dict[status_code] = 1
-
-        if line_no % 10 == 0:
-            print(f"File size: {total_file_size}")
-            for code in sorted(status_code_dict.keys()):
-                print(f"{code}: {status_code_dict[code]}")
-except KeyboardInterrupt as err:
-    print(f"File size: {total_file_size}")
-    for code in sorted(status_code_dict.keys()):
-        print(f'{code}: {status_code_dict[code]}')
-    print(err)
+except KeyboardInterrupt:
+    pass
+finally:
+    print_stats()
