@@ -1,40 +1,50 @@
-#!/usr/bin/python3
-
-'''
-Prototype: def isWinner(x, nums)
-where x is the number of rounds and nums is an array of n
-Return: name of the player that won the most rounds
-If the winner cannot be determined, return None
-assume n and x will not be larger than 10000
-'''
-
 def isWinner(x, nums):
-    if not nums or x < 1:
+    def is_prime(num):
+        if num < 2:
+            return False
+        for i in range(2, int(num**0.5) + 1):
+            if num % i == 0:
+                return False
+        return True
+
+    def remove_multiples(num, nums):
+        return [n for n in nums if n % num != 0]
+
+    def can_make_move(nums):
+        for num in nums:
+            if is_prime(num):
+                return True
+        return False
+
+    maria_wins = 0
+    ben_wins = 0
+
+    for n in nums:
+        current_nums = list(range(1, n + 1))
+        maria_turn = True
+
+        while can_make_move(current_nums):
+            prime_candidates = [num for num in current_nums if is_prime(num)]
+
+            if maria_turn:
+                chosen_prime = min(prime_candidates)
+                maria_wins += 1
+            else:
+                chosen_prime = max(prime_candidates)
+                ben_wins += 1
+
+            current_nums = remove_multiples(chosen_prime, current_nums)
+            maria_turn = not maria_turn
+
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
         return None
 
-    n = max(nums)
-    sieve = [True] * (n + 1)
-    sieve[0] = sieve[1] = False
-    for i in range(2, int(n ** 0.5) + 1):
-        if sieve[i]:
-            for j in range(i * i, n + 1, i):
-                sieve[j] = False
-
-    primes = []
-    for i in range(len(sieve)):
-        if sieve[i]:
-            primes.append(i)
-
-    wins = 0
-    for n in nums:
-        if n in primes:
-            wins += 1
-
-    if wins == x:
-        return "Maria"
-    if wins < x:
-        return "Ben"
-    return None
-
-
-
+# Example usage:
+# x = 3
+# nums = [4, 5, 1]
+# result = isWinner(x, nums)
+# print(result)
