@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
-'''
+"""
 Module that contains the isWinner function
-'''
+"""
+
 
 def isWinner(x, nums):
-    '''
+    """
     Prime Game
-    '''
+    """
     if not nums or x < 1:
         return None
 
@@ -15,7 +16,7 @@ def isWinner(x, nums):
     def generate_primes(n):
         sieve = [True] * (n + 1)
         sieve[0] = sieve[1] = False
-        for i in range(2, int(n ** 0.5) + 1):
+        for i in range(2, int(n**0.5) + 1):
             if sieve[i]:
                 for j in range(i * i, n + 1, i):
                     sieve[j] = False
