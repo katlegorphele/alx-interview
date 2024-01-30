@@ -1,4 +1,5 @@
 #!/usr/bin/node
+
 /* Fetch Data from starwars API 
 Display one character name per line in the 
 same order as the “characters” list in the /films/ endpoint*/
